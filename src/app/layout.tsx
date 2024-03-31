@@ -4,7 +4,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import personalLogo from "../assets/ANlogoWhiteTransparent.png";
 import Image from "next/image";
-import Header from "@/components/Header";
+import Header from "@/components/header";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,7 +26,7 @@ export default function RootLayout({
           <main className="min-h-screen">{children}</main>
 
           <footer className="bg-black w-full flex  flex-row-reverse justify-center items-center text-white font-semibold">
-            <h3>Mady by A.N.PRONOY </h3>
+            <h3>Made by A.N.PRONOY </h3>
             <Image src={personalLogo} alt="brand" width={40} height={40} />
           </footer>
         </body>
