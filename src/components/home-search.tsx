@@ -1,11 +1,12 @@
 "use client";
 import { useState } from "react";
 import { Input } from "./ui/input";
-import { Camera, CircleX, Upload } from "lucide-react";
+import { Camera, CircleX, Search, Upload } from "lucide-react";
 import { Button } from "./ui/button";
 import { toast } from "sonner";
 import { useDropzone } from "react-dropzone";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const HomeSearch = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -13,7 +14,8 @@ const HomeSearch = () => {
   const [imagePreview, setImagePreview] = useState("");
   const [isUploading, setIsUploading] = useState(false);
   const [isImageSearchActive, setIsImageSearchActive] = useState(false);
-
+  const router = useRouter();
+console.log(searchImage)
   const isProcessing = false;
 
   // Handle image upload with react-dropzone
@@ -51,19 +53,32 @@ const HomeSearch = () => {
       maxFiles: 1,
     });
 
-  const handleTextSubmit = () => {};
-  const handleImageSearch = () => {};
+  // text search function
+  const handleTextSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!searchTerm.trim()) {
+      toast.error("Please enter a search term.");
+      return;
+    }
+    router.push(`/cars?search=${encodeURIComponent(searchTerm)}`);
+  };
+
+  // image search function
+  const handleImageSearch = async (e: React.FormEvent) => {
+    e.preventDefault();
+    toast.error("Please upload an image first.");
+  };
   return (
     <div>
       <form onSubmit={handleTextSubmit}>
-        <div className="relative flex items-center">
+        <div className="relative flex items-center ">
           <Input
             type="text"
             placeholder="Enter make, model, or use our AI Image Search..."
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10 pr-12 py-6 w-full rounded-full border-gray-300 bg-white/95 backdrop-blur-sm"
+            className="pl-5 md:pl-10 pr-12 py-6 w-full rounded-full border-gray-300 bg-white/95 backdrop-blur-sm"
           />
-          <div className="absolute right-[100px]">
+          <div className="absolute right-[100px] bg-gray-50 rounded-lg">
             <Camera
               size={35}
               onClick={() => setIsImageSearchActive(!isImageSearchActive)}
@@ -132,6 +147,7 @@ const HomeSearch = () => {
                 className="w-full"
                 disabled={isUploading || isProcessing}
               >
+                {!isUploading && !isProcessing && <Search />}
                 {isUploading
                   ? "Uploading..."
                   : isProcessing
