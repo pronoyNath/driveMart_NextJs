@@ -16,18 +16,19 @@ import {
 } from "@/components/ui/accordion";
 import { SignedOut } from "@clerk/nextjs";
 import SplashCursor from "@/components/SplashCursor";
+import Threads from "@/components/Threades";
 
 export default function Home() {
   return (
     <div className="pt-20 flex flex-col">
-      
-
       {/* background  */}
       <div className="min-h-screen fixed -z-10 bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]"></div>
 
       {/* hero  */}
       <section className={`relative py-16 md:py-28`}>
-      <SplashCursor />
+        {/* <SplashCursor /> */}
+        <Threads amplitude={3} distance={1} enableMouseInteraction={false} />
+
         <div className="max-w-5xl mx-auto text-center">
           <div className="mb-8">
             <BlurText
@@ -192,7 +193,7 @@ export default function Home() {
       </section>
       {/* CTA Section */}
       <section className="py-16 relative h-full w-full overflow-hidden ">
-      <SplashCursor />
+        <SplashCursor />
         <div className="absolute top-0 -z-10 size-full ">
           <div className="absolute bottom-auto left-auto right-0 top-0 size-[500px] translate-x-[-30%] translate-y-[20%] rounded-full bg-[rgba(109,181,244,0.5)] opacity-50 blur-[80px]" />
         </div>
