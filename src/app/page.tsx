@@ -15,15 +15,19 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { SignedOut } from "@clerk/nextjs";
+import SplashCursor from "@/components/SplashCursor";
 
 export default function Home() {
   return (
     <div className="pt-20 flex flex-col">
+      
+
       {/* background  */}
       <div className="min-h-screen fixed -z-10 bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]"></div>
 
       {/* hero  */}
       <section className={`relative py-16 md:py-28`}>
+      <SplashCursor />
         <div className="max-w-5xl mx-auto text-center">
           <div className="mb-8">
             <BlurText
@@ -187,8 +191,11 @@ export default function Home() {
         </div>
       </section>
       {/* CTA Section */}
-      <section className="py-16 relative h-full w-full  overflow-hidden">
-      <div className="absolute -z-10 h-full w-full  bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)]"></div>
+      <section className="py-16 relative h-full w-full overflow-hidden ">
+      <SplashCursor />
+        <div className="absolute top-0 -z-10 size-full ">
+          <div className="absolute bottom-auto left-auto right-0 top-0 size-[500px] translate-x-[-30%] translate-y-[20%] rounded-full bg-[rgba(109,181,244,0.5)] opacity-50 blur-[80px]" />
+        </div>
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-4">
             Ready to Find Your Dream Car?
@@ -198,7 +205,7 @@ export default function Home() {
             vehicle through our platform.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Button size="lg" variant="secondary" asChild>
+            <Button size="lg" variant="outline" asChild>
               <Link href="/cars">View All Cars</Link>
             </Button>
             <SignedOut>
@@ -209,8 +216,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      {/* <section className="min-h-screen">hello</section> */}
     </div>
   );
 }
-
-
