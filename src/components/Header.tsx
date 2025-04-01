@@ -4,13 +4,14 @@ import logo from "../assets/driveMartBlackLogo.png";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import { Button } from "./ui/button";
 import { ArrowLeft, CarFront, Heart, Layout } from "lucide-react";
+import { Badge } from "./ui/badge";
 
 const Header = ({ isAdminPage = false }) => {
   const isAdmin = false;
   return (
     <header className="fixed top-0 left-0 bg-white/80 backdrop-blur-md z-50 border-b w-full">
       <nav className="mx-auto px-4 py-4 flex items-center justify-between">
-        <Link href={isAdminPage ? "/admin" : "/"} className="flex">
+        <Link href={isAdminPage ? "/admin" : "/"} className="relative">
           <Image
             src={logo}
             alt="projectLogo"
@@ -19,7 +20,9 @@ const Header = ({ isAdminPage = false }) => {
             className="h-14 object-cover"
           />
           {isAdminPage && (
-            <span className="text-xs font-extralight">admin</span>
+            <Badge variant={"destructive"} className="text-xs font-extralight absolute -top-1  -right-4">
+              admin
+            </Badge>
           )}
         </Link>
 
