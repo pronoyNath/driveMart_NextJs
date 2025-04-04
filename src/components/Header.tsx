@@ -24,7 +24,7 @@ type TUser =
 const Header = async ({ isAdminPage = false }) => {
   const user: TUser = await checkUser();
   const isAdmin = user?.role === "ADMIN";
-
+  
   return (
     <header className="fixed top-0 left-0 bg-white/80 backdrop-blur-md z-50 border-b w-full">
       <nav className="mx-auto px-4 py-4 flex items-center justify-between">
@@ -62,6 +62,7 @@ const Header = async ({ isAdminPage = false }) => {
                   <span className="hidden md:inline"> Saved Cars</span>
                 </Button>
               </Link>
+              
               {!isAdmin ? (
                 <Link href={"/reservations"}>
                   <Button variant={"outline"}>
