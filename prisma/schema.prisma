@@ -63,7 +63,7 @@ enum CarStatus {
   SOLD
 }
 
-// Single dealership configuration, if you have multiple dealerships, you can remove default values.
+// Single dealership configuration, if I have multiple dealerships, I can remove default values.
 model DealershipInfo {
   id           String        @id @default(uuid())
   name         String        @default("DriveMart Motors")

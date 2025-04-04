@@ -5,9 +5,26 @@ import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import { Button } from "./ui/button";
 import { ArrowLeft, CarFront, Heart, Layout } from "lucide-react";
 import { Badge } from "./ui/badge";
+import { checkUser } from "@/lib/checkUser";
+type TUser =
+  | {
+      id: string;
+      clerkUserId: string;
+      email: string;
+      name: string | null;
+      imageUrl: string | null;
+      phone: string | null;
+      createdAt: Date;
+      updatedAt: Date;
+      role: "USER" | "ADMIN";
+    }
+  | null
+  | undefined;
 
-const Header = ({ isAdminPage = false }) => {
-  const isAdmin = false;
+const Header = async ({ isAdminPage = false }) => {
+  const user: TUser = await checkUser();
+  const isAdmin = user?.role === "ADMIN";
+
   return (
     <header className="fixed top-0 left-0 bg-white/80 backdrop-blur-md z-50 border-b w-full">
       <nav className="mx-auto px-4 py-4 flex items-center justify-between">
@@ -20,7 +37,10 @@ const Header = ({ isAdminPage = false }) => {
             className="h-14 object-cover"
           />
           {isAdminPage && (
-            <Badge variant={"destructive"} className="text-xs font-extralight absolute -top-1  -right-4">
+            <Badge
+              variant={"destructive"}
+              className="text-xs font-extralight absolute -top-1  -right-4"
+            >
               admin
             </Badge>
           )}
