@@ -50,7 +50,7 @@ export default function Home() {
       </section>
       {/* featured cars  */}
       <section className="py-12">
-        <div className="container mx-auto px-4">
+        <div className=" mx-auto px-4">
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-2xl font-bold">Featured Cars</h2>
             <Button variant="ghost" className="flex items-center" asChild>
@@ -68,7 +68,7 @@ export default function Home() {
       </section>
       {/* browse to make  */}
       <section className="py-12 bg-gray-50">
-        <div className="container mx-auto px-4">
+        <div className=" mx-auto px-4">
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-2xl font-bold">Browse by Make</h2>
             <Button variant="ghost" className="flex items-center" asChild>
@@ -102,7 +102,7 @@ export default function Home() {
       </section>
       {/* Why Choose Us */}
       <section className="py-16">
-        <div className="container mx-auto px-4">
+        <div className=" mx-auto px-4">
           <h2 className="text-2xl font-bold text-center mb-12">
             Why Choose DriveMart AI
           </h2>
@@ -141,7 +141,7 @@ export default function Home() {
       </section>
       {/* Browse by Body Type */}
       <section className="py-12 bg-gray-50">
-        <div className="container mx-auto px-4">
+        <div className=" mx-auto px-4">
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-2xl font-bold">Browse by Body Type</h2>
             <Button variant="ghost" className="flex items-center" asChild>
@@ -177,7 +177,7 @@ export default function Home() {
       </section>
       {/* FAQ Section with Accordion */}
       <section className="py-12 bg-gray-50">
-        <div className="container mx-auto px-4">
+        <div className=" mx-auto px-4">
           <h2 className="text-2xl font-bold text-center mb-8">
             Frequently Asked Questions
           </h2>
@@ -197,7 +197,7 @@ export default function Home() {
         <div className="absolute top-0 -z-10 size-full ">
           <div className="absolute bottom-auto left-auto right-0 top-0 size-[500px] translate-x-[-30%] translate-y-[20%] rounded-full bg-[rgba(109,181,244,0.5)] opacity-50 blur-[80px]" />
         </div>
-        <div className="container mx-auto px-4 text-center">
+        <div className=" mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-4">
             Ready to Find Your Dream Car?
           </h2>
