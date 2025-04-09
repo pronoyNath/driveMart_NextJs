@@ -156,7 +156,10 @@ export const AddCarForm = () => {
       reader.onload = (e: ProgressEvent<FileReader>) => {
         setUploadedImages((prev) => [...prev, e.target!.result as string]);
       };
-      reader.readAsDataURL(uploadedAiImage!);
+      if(!uploadedAiImage){
+        return;
+      }
+      reader.readAsDataURL(uploadedAiImage);
 
       toast.success("Successfully extracted car details", {
         description: `Detected ${carDetails.year} ${carDetails.make} ${
@@ -170,14 +173,25 @@ export const AddCarForm = () => {
   }, [processImageResult, setValue, uploadedAiImage]);
 
   // Process image with Gemini AI
-  const processWithAI = async () => {
-    if (!uploadedAiImage) {
-      toast.error("Please upload an image first");
-      return;
-    }
+const processWithAI = async () => {
+  if (!uploadedAiImage) {
+    toast.error("Please upload an image first");
+    return;
+  }
 
-    await processImageFn(uploadedAiImage as File);
+  // Convert File to base64 on client before sending to server
+  const fileToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = reject;
+    });
   };
+
+  const base64Image = await fileToBase64(uploadedAiImage as File);
+  await processImageFn(base64Image, uploadedAiImage.type);
+};
 
   // Handle AI image upload with Dropzone
   const onAiDrop = useCallback((acceptedFiles: FileWithPath[]) => {
@@ -230,12 +244,12 @@ export const AddCarForm = () => {
         clearInterval(interval);
 
         // Process the images
-        const newImages: string[] = []; 
+        const newImages: string[] = [];
         validFiles.forEach((file) => {
           const reader = new FileReader();
           reader.onload = (e: ProgressEvent<FileReader>) => {
             if (e.target?.result) {
-              newImages.push(e.target.result as string); 
+              newImages.push(e.target.result as string);
 
               // When all images are processed
               if (newImages.length === validFiles.length) {
@@ -270,7 +284,7 @@ export const AddCarForm = () => {
     setUploadedImages((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const onSubmit:SubmitHandler<FieldValues> = async (data) => {
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     // Check if images are uploaded
     if (uploadedImages.length === 0) {
       setImageError("Please upload at least one image");
@@ -511,7 +525,9 @@ export const AddCarForm = () => {
                   <div className="space-y-2">
                     <Label htmlFor="status">Status</Label>
                     <Select
-                      onValueChange={(value) => setValue("status", value as CarStatus)}
+                      onValueChange={(value) =>
+                        setValue("status", value as CarStatus)
+                      }
                       defaultValue={getValues("status")}
                     >
                       <SelectTrigger>
@@ -668,9 +684,11 @@ export const AddCarForm = () => {
                 <div className="border-2 border-dashed rounded-lg p-6 text-center">
                   {imagePreview ? (
                     <div className="flex flex-col items-center">
-                      <img
+                      <Image
                         src={imagePreview}
                         alt="Car preview"
+                        height={500}
+                        width={500}
                         className="max-h-56 max-w-full object-contain mb-4"
                       />
                       <div className="flex gap-2">
@@ -738,7 +756,10 @@ export const AddCarForm = () => {
                   <h3 className="font-medium mb-2">How it works</h3>
                   <ol className="space-y-2 text-sm text-gray-600 list-decimal pl-4">
                     <li>Upload a clear image of the car</li>
-                    <li>Click &quot;Extract Details&quot; to analyze with Gemini AI</li>
+                    <li>
+                      Click &quot;Extract Details&quot; to analyze with Gemini
+                      AI
+                    </li>
                     <li>Review the extracted information</li>
                     <li>Fill in any missing details manually</li>
                     <li>Add the car to your inventory</li>

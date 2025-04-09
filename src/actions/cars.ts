@@ -1,6 +1,5 @@
 "use server";
 
-
 import { db } from "@/lib/prisma";
 import { createClient } from "@/lib/superbase";
 import { TAddCar } from "@/types/car-types";
@@ -10,17 +9,18 @@ import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { v4 as uuidv4 } from "uuid";
 
-
-
-// Function to convert File to base64
-async function fileToBase64(file: File) {
-  const bytes = await file.arrayBuffer();
-  const buffer = Buffer.from(bytes);
-  return buffer.toString("base64");
-}
+// Function to convert File to base64 ###[currently not necessary, but kept for reference]
+// async function fileToBase64(file: File) {
+//   const bytes = await file.arrayBuffer();
+//   const buffer = Buffer.from(bytes);
+//   return buffer.toString("base64");
+// }
 
 // Gemini AI integration for car image processing
-export async function processCarImageWithAI(file: File) {
+export async function processCarImageWithAI(
+  base64Image: string,
+  mimeType: string
+) {
   try {
     if (!process.env.GEMINI_API_KEY) {
       throw new Error("Gemini API key is not configured");
@@ -28,13 +28,11 @@ export async function processCarImageWithAI(file: File) {
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
     const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
-    const base64Image = await fileToBase64(file);
-
     // Create image part for the model
     const imagePart = {
       inlineData: {
-        data: base64Image,
-        mimeType: file.type,
+        data: base64Image.split(",")[1], // Remove the data URL prefix
+        mimeType: mimeType,
       },
     };
 
@@ -111,7 +109,6 @@ export async function processCarImageWithAI(file: File) {
         data: carDetails,
       };
     } catch (error) {
-      console.log("Raw Response", text);
       console.error("Error parsing AI response:", error);
       return {
         success: false,
