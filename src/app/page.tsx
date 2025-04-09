@@ -101,7 +101,7 @@ export default function Home() {
         </div>
       </section>
       {/* Why Choose Us */}
-      <section className="py-16">
+      <section className="py-16 text-primary">
         <div className=" mx-auto px-4">
           <h2 className="text-2xl font-bold text-center mb-12">
             Why Choose DriveMart AI
@@ -176,16 +176,16 @@ export default function Home() {
         </div>
       </section>
       {/* FAQ Section with Accordion */}
-      <section className="py-12 bg-gray-50">
+      <section className="py-12 bg-gray-50 text-primary">
         <div className=" mx-auto px-4">
-          <h2 className="text-2xl font-bold text-center mb-8">
+          <h2 className="text-2xl text-primary font-bold text-center mb-8">
             Frequently Asked Questions
           </h2>
-          <Accordion type="single" collapsible className="w-full">
+          <Accordion type="single" collapsible className="w-full text-primary">
             {faqItems.map((faq, index) => (
               <AccordionItem key={index} value={`item-${index}`}>
-                <AccordionTrigger>{faq.question}</AccordionTrigger>
-                <AccordionContent>{faq.answer}</AccordionContent>
+                <AccordionTrigger className="text-primary">{faq.question}</AccordionTrigger>
+                <AccordionContent className="text-primary">{faq.answer}</AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>

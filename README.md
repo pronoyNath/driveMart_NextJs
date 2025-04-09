@@ -11,6 +11,7 @@ DriveMart is a modern, responsive car marketplace web app where users can buy, s
 - 🔍 **AI Car Search by Image Upload** – Find cars by uploading an image using AI capabilities
 - 🚘 **Buy & Sell Cars** – List vehicles or browse listings with detailed views
 - 🧩 **Fully Responsive Design** – Optimized for mobile, tablet, and desktop
+- 🔍 **Custom Hooks** - Used Custom Hooks For API Calls
 - ✨ **Framer Motion Animations** – Smooth transitions and interactive UI
 - 🧱 **Reusable & Modular Components** – Clean code architecture
 - 🎨 **shadcn/ui + Tailwind CSS** – Professional, consistent UI components

@@ -1,37 +1,16 @@
+"use server";
+
+
 import { db } from "@/lib/prisma";
 import { createClient } from "@/lib/superbase";
+import { TAddCar } from "@/types/car-types";
 import { auth } from "@clerk/nextjs/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { v4 as uuidv4 } from "uuid";
 
-export enum CarStatus {
-  AVAILABLE = "AVAILABLE",
-  UNAVAILABLE = "UNAVAILABLE",
-  SOLD = "SOLD",
-}
 
-export type TCar = {
-  make: string;
-  model: string;
-  year: number;
-  price: number;
-  mileage: number;
-  color: string;
-  fuelType: string;
-  transmission: string;
-  bodyType: string;
-  seats: number;
-  description: string;
-  status: CarStatus | undefined;
-  featured: boolean;
-};
-
-type TAddCar = {
-  carData: TCar;
-  images: string[];
-};
 
 // Function to convert File to base64
 async function fileToBase64(file: File) {

@@ -6,6 +6,8 @@ import { Button } from "./ui/button";
 import { ArrowLeft, CarFront, Heart, Layout } from "lucide-react";
 import { Badge } from "./ui/badge";
 import { checkUser } from "@/lib/checkUser";
+// import { ThemeColorToggle } from "./theme-color-toggle";
+// import { ThemeModeToggle } from "./theme-mode-toggle";
 type TUser =
   | {
       id: string;
@@ -45,7 +47,8 @@ const Header = async ({ isAdminPage = false }) => {
             </Badge>
           )}
         </Link>
-
+        {/* <ThemeColorToggle />
+        <ThemeModeToggle /> */}
         <div className="flex items-center space-x-4">
           {isAdminPage ? (
             <Link href={"/"}>
@@ -72,7 +75,7 @@ const Header = async ({ isAdminPage = false }) => {
                 </Link>
               ) : (
                 <Link href={"/admin"}>
-                  <Button variant={"outline"}>
+                  <Button variant={"outline"} className="">
                     <Layout size={18} />
                     <span className="hidden md:inline">Admin Portal</span>
                   </Button>
