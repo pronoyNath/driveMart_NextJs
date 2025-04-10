@@ -15,7 +15,7 @@ import { v4 as uuidv4 } from "uuid";
 type GetCarsResponse =
   | {
       success: true;
-      data: TFullCar[]; // Replace `any` with the actual type if known, like `SerializedCar[]`
+      data: TFullCar[]; 
     }
   | {
       success: false;
@@ -57,7 +57,7 @@ export async function processCarImageWithAI(
       3. Year (approximately)
       4. Color
       5. Body type (SUV, Sedan, Hatchback, etc.)
-      6. Mileage
+      6. Mileage[shouldn't be 'new' or 'used', but a number]
       7. Fuel type (your best guess)
       8. Transmission type (your best guess)
       9. Price (your best guess) [don't use currency symbols]

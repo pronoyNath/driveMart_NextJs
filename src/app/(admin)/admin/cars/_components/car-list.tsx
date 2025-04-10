@@ -46,6 +46,10 @@ import useFetch from "@/hooks/use-fetch";
 import { getCars, deleteCar, updateCarStatus } from "@/actions/cars";
 
 import Image from "next/image";
+import { FieldValues, SubmitHandler } from "react-hook-form";
+import { TFullCar } from "@/types/car-types";
+import { CarStatus } from "@prisma/client";
+import { formatCurrency } from "@/lib/helpers";
 
 export const CarsList = () => {
   const router = useRouter();
@@ -53,7 +57,7 @@ export const CarsList = () => {
   // State for search and dialogs
   const [search, setSearch] = useState("");
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [carToDelete, setCarToDelete] = useState(null);
+  const [carToDelete, setCarToDelete] = useState<TFullCar | null>(null);
 
   // Custom hooks for API calls
   const {
@@ -111,7 +115,7 @@ export const CarsList = () => {
   }, [deleteResult, updateResult, search]);
 
   // Handle search submit
-  const handleSearchSubmit = (e) => {
+  const handleSearchSubmit: SubmitHandler<FieldValues> = (e) => {
     e.preventDefault();
     fetchCars(search);
   };
@@ -120,23 +124,23 @@ export const CarsList = () => {
   const handleDeleteCar = async () => {
     if (!carToDelete) return;
 
-    await deleteCarFn(carToDelete.id);
+    await deleteCarFn(carToDelete?.id as string);
     setDeleteDialogOpen(false);
     setCarToDelete(null);
   };
 
   // Handle toggle featured status
-  const handleToggleFeatured = async (car) => {
-    await updateCarStatusFn(car.id, { featured: !car.featured });
+  const handleToggleFeatured = async (car: TFullCar) => {
+    await updateCarStatusFn(car.id as string, { featured: !car.featured });
   };
 
   // Handle status change
-  const handleStatusUpdate = async (car, newStatus) => {
-    await updateCarStatusFn(car.id, { status: newStatus });
+  const handleStatusUpdate = async (car : TFullCar, newStatus : CarStatus) => {
+    await updateCarStatusFn(car.id as string, { status: newStatus });
   };
 
   // Get status badge color
-  const getStatusBadge = (status) => {
+  const getStatusBadge = (status: CarStatus) => {
     switch (status) {
       case "AVAILABLE":
         return (
@@ -234,8 +238,8 @@ export const CarsList = () => {
                         {car.make} {car.model}
                       </TableCell>
                       <TableCell>{car.year}</TableCell>
-                      <TableCell>{formatCurrency(car.price)}</TableCell>
-                      <TableCell>{getStatusBadge(car.status)}</TableCell>
+                      <TableCell>{formatCurrency(car.price as number)}</TableCell>
+                      <TableCell>{getStatusBadge(car.status as CarStatus)}</TableCell>
                       <TableCell>
                         <Button
                           variant="ghost"

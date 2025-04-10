@@ -23,21 +23,14 @@ import { CarStatus, Prisma } from "@prisma/client";
   };
 
 
-  
-
-
-
-  // ....
-
-
-// Type for UserSavedCar (you can define it based on your actual model)
+// Type for UserSavedCar 
 type UserSavedCar = {
   userId: string;
   carId: string;
   savedAt: Date;
 };
 
-// Type for TestDriveBooking (you can define it based on your actual model)
+// Type for TestDriveBooking 
 type TestDriveBooking = {
   bookingId: string;
   carId: string;
