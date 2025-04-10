@@ -32,7 +32,8 @@ import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import useFetch from "@/hooks/use-fetch";
 import { addCar, processCarImageWithAI } from "@/actions/cars";
-import { CarStatus, TCar } from "@/types/car-types";
+import {  TCar } from "@/types/car-types";
+import { CarStatus } from "@prisma/client";
 
 // Predefined options
 const fuelTypes = ["Petrol", "Diesel", "Electric", "Hybrid", "Plug-in Hybrid"];
