@@ -62,6 +62,7 @@ export const CarsList = () => {
   // Custom hooks for API calls
   const {
     loading: loadingCars,
+    fetching: IsFetching,
     fn: fetchCars,
     data: carsData,
     error: carsError,
@@ -112,7 +113,7 @@ export const CarsList = () => {
       toast.success("Car updated successfully");
       fetchCars(search);
     }
-  }, [deleteResult, updateResult, search]);
+  }, [deleteResult, updateResult]);
 
   // Handle search submit
   const handleSearchSubmit: SubmitHandler<FieldValues> = (e) => {
@@ -195,7 +196,7 @@ export const CarsList = () => {
       {/* Cars Table */}
       <Card>
         <CardContent className="p-0">
-          {loadingCars && !carsData ? (
+          {IsFetching && loadingCars && !carsData ? (
             <div className="flex justify-center items-center py-12">
               <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
             </div>
@@ -267,7 +268,7 @@ export const CarsList = () => {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                            <DropdownMenuLabel className="border-b-2">Actions</DropdownMenuLabel>
                             <DropdownMenuItem
                               onClick={() => router.push(`/cars/${car.id}`)}
                             >
@@ -275,7 +276,7 @@ export const CarsList = () => {
                               View
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <DropdownMenuLabel>Status</DropdownMenuLabel>
+                            <DropdownMenuLabel className="border-b-2">Status</DropdownMenuLabel>
                             <DropdownMenuItem
                               onClick={() =>
                                 handleStatusUpdate(car, "AVAILABLE")

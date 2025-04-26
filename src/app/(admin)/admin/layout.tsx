@@ -1,7 +1,7 @@
 import { getAdmin } from "@/actions/admin";
 import Header from "@/components/header";
 import { notFound } from "next/navigation";
-import { Sidebar } from "./sidebar";
+import { Sidebar } from "./_components/sidebar";
 
 const AdminLayout = async ({ children }: { children: React.ReactNode }) => {
   const admin = await getAdmin();
