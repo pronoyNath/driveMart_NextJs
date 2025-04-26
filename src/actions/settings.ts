@@ -3,7 +3,12 @@
 import { revalidatePath } from "next/cache";
 import { db } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
-import { TWorkingHour } from "@/types/settings-types";
+import { TUserRole, TWorkingHour } from "@/types/settings-types";
+
+type TUpdatedRole = {
+  userId: string;
+  role: TUserRole;
+};
 
 // Get dealership info with working hours
 export async function getDealershipInfo() {
@@ -94,7 +99,10 @@ export async function getDealershipInfo() {
       },
     };
   } catch (error) {
-    throw new Error("Error fetching dealership info:" + (error instanceof Error && error.message));
+    throw new Error(
+      "Error fetching dealership info:" +
+        (error instanceof Error && error.message)
+    );
   }
 }
 
@@ -146,7 +154,9 @@ export async function saveWorkingHours(workingHours: TWorkingHour[]) {
       success: true,
     };
   } catch (error) {
-    throw new Error("Error saving working hours:" + error.message);
+    throw new Error(
+      "Error saving working hours:" + (error instanceof Error && error.message)
+    );
   }
 }
 
@@ -179,12 +189,12 @@ export async function getUsers() {
       })),
     };
   } catch (error) {
-    throw new Error("Error fetching users:" + error.message);
+    throw new Error("Error fetching users:" + (error instanceof Error && error.message));
   }
 }
 
 // Update user role
-export async function updateUserRole(userId, role) {
+export async function updateUserRole({ userId, role }: TUpdatedRole) {
   try {
     const { userId: adminId } = await auth();
     if (!adminId) throw new Error("Unauthorized");
@@ -211,6 +221,8 @@ export async function updateUserRole(userId, role) {
       success: true,
     };
   } catch (error) {
-    throw new Error("Error updating user role:" + error.message);
+    throw new Error("Error updating user role:" + (error instanceof Error && error.message));
   }
 }
+
+

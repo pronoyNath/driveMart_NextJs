@@ -62,7 +62,6 @@ export const CarsList = () => {
   // Custom hooks for API calls
   const {
     loading: loadingCars,
-    fetching: IsFetching,
     fn: fetchCars,
     data: carsData,
     error: carsError,
@@ -196,7 +195,7 @@ export const CarsList = () => {
       {/* Cars Table */}
       <Card>
         <CardContent className="p-0">
-          {IsFetching && loadingCars && !carsData ? (
+          {loadingCars && !carsData ? (
             <div className="flex justify-center items-center py-12">
               <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
             </div>
