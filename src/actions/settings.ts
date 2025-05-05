@@ -195,6 +195,7 @@ export async function getUsers() {
 
 // Update user role
 export async function updateUserRole({ userId, role }: TUpdatedRole) {
+  console.log("▶️ check->", userId, role)
   try {
     const { userId: adminId } = await auth();
     if (!adminId) throw new Error("Unauthorized");

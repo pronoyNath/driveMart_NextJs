@@ -43,8 +43,12 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import useFetch from "@/hooks/use-fetch";
-import { getDealershipInfo, getUsers, saveWorkingHours, updateUserRole } from "@/actions/settings";
-
+import {
+  getDealershipInfo,
+  getUsers,
+  saveWorkingHours,
+  updateUserRole,
+} from "@/actions/settings";
 
 // Day names for display
 const DAYS = [
@@ -196,13 +200,13 @@ export const SettingsForm = () => {
   // Make user admin
   const handleMakeAdmin = async () => {
     if (!userToPromote) return;
-    await updateRole(userToPromote.id, "ADMIN");
+    await updateRole({ userId: userToPromote?.id, role: "ADMIN" });
   };
 
   // Remove admin privileges
   const handleRemoveAdmin = async () => {
     if (!userToDemote) return;
-    await updateRole(userToDemote.id, "USER");
+    await updateRole({ userId: userToDemote?.id, role: "USER" });
   };
 
   // Filter users by search term
