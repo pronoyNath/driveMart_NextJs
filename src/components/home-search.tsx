@@ -1,22 +1,56 @@
 "use client";
-import { useState } from "react";
-import { Input } from "./ui/input";
-import { Camera, CircleX, Search, Upload } from "lucide-react";
+
+import { useState, useEffect } from "react";
+import { Search, Upload, Camera } from "lucide-react";
 import { Button } from "./ui/button";
 import { toast } from "sonner";
 import { useDropzone } from "react-dropzone";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
+import useFetch from "@/hooks/use-fetch";
+import { processImageSearch } from "@/actions/home";
+import Image from "next/image";
+import { Input } from "./ui/input";
 
-const HomeSearch = () => {
+export function HomeSearch() {
+  const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
   const [searchImage, setSearchImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState("");
   const [isUploading, setIsUploading] = useState(false);
   const [isImageSearchActive, setIsImageSearchActive] = useState(false);
-  const router = useRouter();
-console.log(searchImage)
-  const isProcessing = false;
+
+  // Use the useFetch hook for image processing
+  const {
+    loading: isProcessing,
+    fn: processImageFn,
+    data: processResult,
+    error: processError,
+  } = useFetch(processImageSearch);
+
+  // Handle process result and errors with useEffect
+  useEffect(() => {
+    if (processResult?.success) {
+      const params = new URLSearchParams();
+
+      // Add extracted params to the search
+      if (processResult.data.make) params.set("make", processResult.data.make);
+      if (processResult.data.bodyType)
+        params.set("bodyType", processResult.data.bodyType);
+      if (processResult.data.color)
+        params.set("color", processResult.data.color);
+
+      // Redirect to search results
+      router.push(`/cars?${params.toString()}`);
+    }
+  }, [processResult, router]);
+
+  useEffect(() => {
+    if (processError) {
+      toast.error(
+        "Failed to analyze image: " + (processError.message || "Unknown error")
+      );
+    }
+  }, [processError]);
 
   // Handle image upload with react-dropzone
   const onDrop = (acceptedFiles: File[]) => {
@@ -32,7 +66,7 @@ console.log(searchImage)
 
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImagePreview(reader.result as string);
+        setImagePreview(reader?.result as string);
         setIsUploading(false);
         toast.success("Image uploaded successfully");
       };
@@ -53,32 +87,55 @@ console.log(searchImage)
       maxFiles: 1,
     });
 
-  // text search function
-  const handleTextSubmit = (e: React.FormEvent) => {
+  // Handle text search submissions
+  const handleTextSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (!searchTerm.trim()) {
-      toast.error("Please enter a search term.");
+      toast.error("Please enter a search term");
       return;
     }
+
     router.push(`/cars?search=${encodeURIComponent(searchTerm)}`);
   };
 
-  // image search function
+  // Handle image search submissions
   const handleImageSearch = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast.error("Please upload an image first.");
+
+    if (!searchImage) {
+      toast.error("Please upload an image first");
+      return;
+    }
+    // Convert File to base64 on client before sending to server
+    const fileToBase64 = (file: File): Promise<string> => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = reject;
+      });
+    };
+
+    const base64Image = await fileToBase64(searchImage as File);
+    // Use the processImageFn from useFetch hook
+    await processImageFn(base64Image, searchImage.type);
   };
+
   return (
     <div>
-      <form onSubmit={handleTextSubmit}>
-        <div className="relative flex items-center ">
+      <form onSubmit={handleTextSearch}>
+        <div className="relative flex items-center">
+          <Search className="absolute left-3 w-5 h-5" />
           <Input
             type="text"
             placeholder="Enter make, model, or use our AI Image Search..."
+            value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-5 md:pl-10 pr-12 py-6 w-full rounded-full border-gray-300 bg-white/95 backdrop-blur-sm"
+            className="pl-10 pr-12 py-6 w-full rounded-full border-gray-300 bg-white/95 backdrop-blur-sm"
           />
-          <div className="absolute right-[100px] bg-gray-50 rounded-lg">
+
+          {/* Image Search Button */}
+          <div className="absolute right-[100px]">
             <Camera
               size={35}
               onClick={() => setIsImageSearchActive(!isImageSearchActive)}
@@ -89,6 +146,7 @@ console.log(searchImage)
               }}
             />
           </div>
+
           <Button type="submit" className="absolute right-2 rounded-full">
             Search
           </Button>
@@ -96,17 +154,17 @@ console.log(searchImage)
       </form>
 
       {isImageSearchActive && (
-        <div className="mt-4">
+        <div className="mt-4 ">
           <form onSubmit={handleImageSearch} className="space-y-4">
-            <div className="border-2 border-dashed border-gray-300 bg-gray-100 rounded-3xl p-6 text-center">
+            <div className="border-2 border-dashed border-gray-300 bg-white rounded-3xl p-6 text-center">
               {imagePreview ? (
                 <div className="flex flex-col items-center">
                   <Image
                     src={imagePreview}
+                    alt="Car preview"
+                    className="h-40 object-contain mb-4"
                     width={400}
                     height={300}
-                    alt="Car preview"
-                    className="h-40 object-contain mb-4 rounded-lg"
                   />
                   <Button
                     variant="outline"
@@ -116,12 +174,11 @@ console.log(searchImage)
                       toast.info("Image removed");
                     }}
                   >
-                    <CircleX className="text-red-400" />
                     Remove Image
                   </Button>
                 </div>
               ) : (
-                <div {...getRootProps()} className="cursor-pointer">
+                <div {...getRootProps()} className="cursor-pointer ">
                   <input {...getInputProps()} />
                   <div className="flex flex-col items-center">
                     <Upload className="h-12 w-12 text-gray-400 mb-2" />
@@ -144,10 +201,13 @@ console.log(searchImage)
             {imagePreview && (
               <Button
                 type="submit"
-                className="w-full"
+                className={`w-full ${
+                  !isUploading || !isProcessing
+                    ? "bg-black"
+                    : "bg-green-300 text-black"
+                }`}
                 disabled={isUploading || isProcessing}
               >
-                {!isUploading && !isProcessing && <Search />}
                 {isUploading
                   ? "Uploading..."
                   : isProcessing
@@ -160,6 +220,4 @@ console.log(searchImage)
       )}
     </div>
   );
-};
-
-export default HomeSearch;
+}

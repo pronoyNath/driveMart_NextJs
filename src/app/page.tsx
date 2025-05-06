@@ -1,7 +1,6 @@
 "use client";
 
 import BlurText from "@/components/BlurText";
-import HomeSearch from "@/components/home-search";
 import { Button } from "@/components/ui/button";
 import { Calendar, Car, ChevronRight, Shield } from "lucide-react";
 import Link from "next/link";
@@ -17,6 +16,7 @@ import {
 import { SignedOut } from "@clerk/nextjs";
 import SplashCursor from "@/components/SplashCursor";
 import Threads from "@/components/Threades";
+import { HomeSearch } from "@/components/home-search";
 
 export default function Home() {
   return (

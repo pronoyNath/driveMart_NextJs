@@ -15,6 +15,8 @@ import { CarStatus, Prisma } from "@prisma/client";
     description: string;
     status: CarStatus | undefined;
     featured: boolean;
+    createdAt?: string;
+    updatedAt?: string;
   };
   
   export type TAddCar = {
