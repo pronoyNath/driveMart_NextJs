@@ -1,4 +1,4 @@
-import { CarStatus, Prisma } from "@prisma/client";
+import { Car, CarStatus, Prisma } from "@prisma/client";
 
 
   export type TCar = {
@@ -65,3 +65,9 @@ export type TFullCar = {
 };
 
 
+export type SafeCar = Omit<Car, "price" | "createdAt" | "updatedAt"> & {
+  price: number;
+  createdAt: string | null;
+  updatedAt: string | null;
+  wishlisted?: boolean;
+};

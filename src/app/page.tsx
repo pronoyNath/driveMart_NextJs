@@ -2,9 +2,9 @@
 
 import BlurText from "@/components/BlurText";
 import { Button } from "@/components/ui/button";
-import { Calendar, Car, ChevronRight, Shield } from "lucide-react";
+import { Calendar, Car, ChevronRight, Loader2, Shield } from "lucide-react";
 import Link from "next/link";
-import { featuredCars, carMakes, bodyTypes, faqItems } from "@/lib/data";
+import { carMakes, bodyTypes, faqItems } from "@/lib/data";
 import CarCard from "@/components/car-card";
 import Image from "next/image";
 import {
@@ -17,8 +17,24 @@ import { SignedOut } from "@clerk/nextjs";
 import SplashCursor from "@/components/SplashCursor";
 import Threads from "@/components/Threades";
 import { HomeSearch } from "@/components/home-search";
+import { getFeaturedCars } from "@/actions/home";
+import { useEffect, useState } from "react";
+import { SafeCar } from "@/types/car-types";
 
 export default function Home() {
+  const [featuredCars, setFeaturedCars] = useState<SafeCar[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const cars = await getFeaturedCars();
+      setFeaturedCars(cars);
+      setLoading(false);
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <div className="pt-20 flex flex-col">
       {/* background  */}
@@ -50,19 +66,21 @@ export default function Home() {
       </section>
       {/* featured cars  */}
       <section className="py-12">
-        <div className=" mx-auto px-4">
-          <div className="flex justify-between items-center mb-8">
-            <h2 className="text-2xl font-bold">Featured Cars</h2>
-            <Button variant="ghost" className="flex items-center" asChild>
+        <div className=" mx-auto px-4 ">
+          <div className="flex justify-between items-center mb-8 ">
+            <h2 className="text-2xl font-bold bg-gradient-to-t from-white to-transparent p-2 rounded-xl">Featured Cars</h2>
+            <Button variant="ghost" className="flex items-center bg-white p-2 rounded-xl" asChild>
               <Link href="/cars">
                 View All <ChevronRight className="ml-1 h-4 w-4" />
               </Link>
             </Button>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {featuredCars.map((car) => (
-              <CarCard key={car.id} car={car} />
-            ))}
+            {loading ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              featuredCars.map((car) => <CarCard key={car.id} car={car} />)
+            )}
           </div>
         </div>
       </section>
@@ -184,8 +202,12 @@ export default function Home() {
           <Accordion type="single" collapsible className="w-full text-primary">
             {faqItems.map((faq, index) => (
               <AccordionItem key={index} value={`item-${index}`}>
-                <AccordionTrigger className="text-primary">{faq.question}</AccordionTrigger>
-                <AccordionContent className="text-primary">{faq.answer}</AccordionContent>
+                <AccordionTrigger className="text-primary">
+                  {faq.question}
+                </AccordionTrigger>
+                <AccordionContent className="text-primary">
+                  {faq.answer}
+                </AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>

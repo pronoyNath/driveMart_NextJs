@@ -5,23 +5,11 @@ import { Button } from "./ui/button";
 import { useState } from "react";
 import { Badge } from "./ui/badge";
 import { useRouter } from "next/navigation";
+import { SafeCar } from "@/types/car-types";
 
-type TCar = {
-  id: number;
-  make: string;
-  model: string;
-  year: number;
-  price: number;
-  images: string[];
-  transmission: string;
-  fuelType: string;
-  bodyType: string;
-  mileage: number;
-  color: string;
-  wishlisted: boolean;
-};
 
-const CarCard = ({ car }: { car: TCar }) => {
+
+const CarCard = ({ car }: { car: SafeCar }) => {
   const router = useRouter();
   const [isSaved, setIsSeved] = useState(car?.wishlisted);
   const handleToggleSave = async (e) => {};
